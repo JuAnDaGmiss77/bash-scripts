@@ -1,0 +1,1 @@
+cuando aparezca `configuring lightdm` en la terminal, selecciona esa opcion (es la que menos recursos usa)
