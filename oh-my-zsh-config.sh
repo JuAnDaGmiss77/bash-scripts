@@ -1,5 +1,6 @@
 #!/bin/bash
 # Script para configurar Oh My Zsh con plugins recomendados y un tema oscuro (powerlevel10k)
+# Este script se asegura de que existan los archivos de inicio de Zsh (.zshrc)
 
 # Función para mostrar mensajes de estado
 print_status() {
@@ -14,7 +15,7 @@ check_command() {
     fi
 }
 
-# Actualizar repositorios e instalar Zsh si no está instalado
+# Verificar e instalar Zsh si no está instalado
 print_status "Verificando e instalando Zsh (si es necesario)"
 if ! command -v zsh &> /dev/null; then
     sudo apt update
@@ -31,6 +32,15 @@ if [ ! -d ~/.oh-my-zsh ]; then
     check_command "No se pudo instalar Oh My Zsh"
 else
     print_status "Oh My Zsh ya está instalado"
+fi
+
+# Asegurarse de que exista el archivo de configuración .zshrc
+if [ ! -f ~/.zshrc ]; then
+    print_status "No se encontró .zshrc. Creándolo a partir de la plantilla de Oh My Zsh"
+    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+    check_command "No se pudo copiar la plantilla de .zshrc"
+else
+    print_status ".zshrc ya existe, se usará para la configuración"
 fi
 
 # Definir directorio custom de Oh My Zsh
@@ -94,20 +104,12 @@ fi
 
 # Actualizar el archivo .zshrc para usar los plugins y el tema deseado
 print_status "Actualizando .zshrc"
-if [ -f ~/.zshrc ]; then
-    # Configurar plugins y establecer el tema a powerlevel10k
-    sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions history-substring-search autojump)/' ~/.zshrc
-    sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-else
-    # Si no existe, copiar la plantilla de Oh My Zsh y modificarla
-    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-    sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions history-substring-search autojump)/' ~/.zshrc
-    sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
-fi
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions history-substring-search autojump)/' ~/.zshrc
+sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
 
 # Cambiar la shell predeterminada a Zsh
 print_status "Cambiando shell predeterminada a Zsh"
 chsh -s "$(which zsh)"
 
 print_status "Configuración de Oh My Zsh completada"
-echo "Por favor, cierra la sesión y vuelve a iniciarla para ver los cambios."
+echo "Por favor, cierra la sesión y vuelve a iniciarla o ejecuta 'exec zsh' para ver los cambios."
