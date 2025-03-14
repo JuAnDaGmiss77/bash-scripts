@@ -179,11 +179,6 @@ cd ~/projects
 python3 -m venv venv
 echo "source ~/projects/venv/bin/activate" >> ~/.zshrc
 
-# Instalar Timeshift para snapshots del sistema
-print_status "Instalando Timeshift para snapshots del sistema"
-sudo apt install -y timeshift
-check_command "No se pudo instalar Timeshift"
-
 # Configurar VSCode con tema oscuro
 print_status "Configurando VSCode con tema oscuro"
 mkdir -p ~/.config/Code/User/
@@ -206,8 +201,6 @@ echo "Ctrl+Alt+T: Abrir terminal"
 echo "Ctrl+Alt+B: Abrir Brave Browser"
 echo "Ctrl+Alt+C: Abrir Visual Studio Code"
 echo ""
-echo "Para crear un snapshot del sistema: sudo timeshift --create --comments \"Configuración inicial\""
-echo "Para restaurar un snapshot: sudo timeshift --restore"
 echo ""
 echo "Cierra sesión y vuelve a iniciar para que los cambios de XFCE y los atajos de teclado funcionen correctamente"
 
