@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script de configuración de entorno de desarrollo en Debian
-# Instalación de: git, python, oh-my-zsh, VSCode, Brave, PostgreSQL
+# Instalación de: python, VSCode, Brave, PostgreSQL
 # Validación e instalación de XFCE si es necesario
 # Creación de atajos de teclado para XFCE
 
