@@ -91,6 +91,10 @@ print_status "Instalando dependencias básicas"
 sudo apt install -y curl wget apt-transport-https software-properties-common ca-certificates gnupg lsb-release xdg-utils
 check_command "No se pudieron instalar las dependencias básicas"
 
+# Instalar Git
+print_status "Instalando Git"
+sudo apt install -y git
+check_command "No se pudo instalar Git"
 
 # Instalar Python y pip
 print_status "Instalando Python y pip"
@@ -102,6 +106,24 @@ if ! command -v python &> /dev/null; then
     echo "alias python='python3'" >> ~/.bashrc
     echo "alias pip='pip3'" >> ~/.bashrc
 fi
+
+# Instalar Zsh (necesario para oh-my-zsh)
+print_status "Instalando Zsh"
+sudo apt install -y zsh
+check_command "No se pudo instalar Zsh"
+
+# Instalar Oh My Zsh
+print_status "Instalando Oh My Zsh"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+check_command "No se pudo instalar Oh My Zsh"
+
+# Instalar plugins útiles para Oh My Zsh
+print_status "Configurando plugins para Oh My Zsh"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Configurar Zsh con plugins
+sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting python pip virtualenv)/' ~/.zshrc
 
 # Instalar Visual Studio Code
 print_status "Instalando Visual Studio Code"
@@ -149,6 +171,13 @@ cat > ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml <<
   </property>
 </channel>
 EOL
+
+# Crear un entorno virtual de Python
+print_status "Creando entorno virtual de Python"
+mkdir -p ~/projects
+cd ~/projects
+python3 -m venv venv
+echo "source ~/projects/venv/bin/activate" >> ~/.zshrc
 
 # Configurar VSCode con tema oscuro
 print_status "Configurando VSCode con tema oscuro"
